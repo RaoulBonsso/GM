@@ -7,6 +7,7 @@ import Card from '@/app/components/ui/Card';
 import Button from '@/app/components/ui/Button';
 import Pagination from '@/app/components/ui/Pagination';
 import { motion } from 'framer-motion';
+import { generateStudentListPDF, generateStudentDetailPDF } from '@/app/utils/pdf/pdfGenerator';
 
 // Types pour les données des élèves
 interface Student {
@@ -22,9 +23,18 @@ interface Student {
   registrationDate: string;
   parentName: string;
   parentPhone: string;
+  // Propriété calculée pour déterminer si l'élève est nouveau
+  isNew?: boolean;
 }
 
 export default function StudentsPage() {
+  // Fonction pour déterminer si un élève est nouveau (inscrit dans les 3 derniers mois)
+  const isNewStudent = (registrationDate: string): boolean => {
+    const threeMonthsAgo = new Date();
+    threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
+    return new Date(registrationDate) >= threeMonthsAgo;
+  };
+
   // Dans une application réelle, ces données proviendraient de la base de données
   const students: Student[] = [
     {
@@ -37,6 +47,7 @@ export default function StudentsPage() {
       registrationDate: '2024-09-01',
       parentName: 'Mamadou Diallo',
       parentPhone: '620123456',
+      isNew: false,
     },
     {
       id: '2',
@@ -48,6 +59,7 @@ export default function StudentsPage() {
       registrationDate: '2024-09-01',
       parentName: 'Aissatou Sow',
       parentPhone: '621789012',
+      isNew: false,
     },
     {
       id: '3',
@@ -59,6 +71,7 @@ export default function StudentsPage() {
       registrationDate: '2024-09-01',
       parentName: 'Ibrahima Bah',
       parentPhone: '622345678',
+      isNew: false,
     },
     {
       id: '4',
@@ -70,6 +83,7 @@ export default function StudentsPage() {
       registrationDate: '2025-03-01',
       parentName: 'Mariama Barry',
       parentPhone: '623456789',
+      isNew: true,
     },
     {
       id: '5',
@@ -81,6 +95,7 @@ export default function StudentsPage() {
       registrationDate: '2024-09-01',
       parentName: 'Abdoulaye Camara',
       parentPhone: '624567890',
+      isNew: false,
     },
   ];
 
@@ -91,6 +106,27 @@ export default function StudentsPage() {
   // Gérer le clic sur une carte d'élève
   const handleStudentClick = (student: Student) => {
     router.push(`/dashboard/students/${student.id}`);
+  };
+  
+  // Gérer l'impression d'une fiche d'élève
+  const handlePrintStudent = (student: Student, e: React.MouseEvent) => {
+    e.stopPropagation(); // Empêcher la navigation vers la page de détails
+    
+    // Préparer les données pour le PDF
+    const studentForPDF = {
+      id: student.id,
+      name: `${student.lastName} ${student.firstName}`,
+      class: student.class.name,
+      gender: student.gender === 'M' ? 'Garçon' : 'Fille',
+      dateOfBirth: student.birthDate,
+      parentName: student.parentName,
+      parentContact: student.parentPhone,
+      enrollmentDate: student.registrationDate,
+      status: student.isNew ? 'Nouvel élève' : 'Élève existant'
+    };
+    
+    // Générer le PDF
+    generateStudentDetailPDF(studentForPDF);
   };
 
   // Filtrer les élèves en fonction du terme de recherche et du filtre de classe
@@ -218,8 +254,25 @@ export default function StudentsPage() {
                   <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
                 </svg>
               }
+              onClick={() => {
+                // Préparer les données pour le PDF
+                const studentsForPDF = filteredStudents.map(student => ({
+                  id: student.id,
+                  name: `${student.lastName} ${student.firstName}`,
+                  class: student.class.name,
+                  gender: student.gender === 'M' ? 'Garçon' : 'Fille',
+                  dateOfBirth: student.birthDate,
+                  parentName: student.parentName,
+                  parentContact: student.parentPhone,
+                  enrollmentDate: student.registrationDate,
+                  status: student.isNew ? 'Nouvel élève' : 'Élève existant'
+                }));
+                
+                // Générer le PDF
+                generateStudentListPDF(studentsForPDF, 'Liste des élèves');
+              }}
             >
-              Exporter
+              Exporter en PDF
             </Button>
           </div>
         </div>
@@ -241,9 +294,19 @@ export default function StudentsPage() {
             >
               <div className="p-5 border-b border-gray-100">
                 <div className="flex justify-between items-center mb-2">
-                  <h3 className="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-700">
-                    {student.lastName} {student.firstName}
-                  </h3>
+                  <div>
+                    <h3 className="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-700">
+                      {student.lastName} {student.firstName}
+                    </h3>
+                    {student.isNew && (
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gradient-to-r from-green-100 to-emerald-100 text-green-800 border border-green-200 animate-pulse">
+                        <svg className="-ml-0.5 mr-1.5 h-2 w-2 text-green-500" fill="currentColor" viewBox="0 0 8 8">
+                          <circle cx="4" cy="4" r="3" />
+                        </svg>
+                        Nouvel élève
+                      </span>
+                    )}
+                  </div>
                   <span className={`px-3 py-1 text-xs font-bold rounded-full ${student.gender === 'M' ? 'bg-blue-100 text-blue-600' : 'bg-pink-100 text-pink-600'}`}>
                     {student.gender === 'M' ? 'Garçon' : 'Fille'}
                   </span>
@@ -268,26 +331,41 @@ export default function StudentsPage() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     <span className="text-sm font-medium text-gray-700">
-                      Inscrit(e) le: <span className="text-purple-600">{new Date(student.registrationDate).toLocaleDateString('fr-FR')}</span>
+                      Inscrit(e) le: <span className={`${student.isNew ? 'font-bold text-green-600' : 'text-purple-600'}`}>{new Date(student.registrationDate).toLocaleDateString('fr-FR')}</span>
+                      {student.isNew && (
+                        <span className="ml-2 inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                          Nouveau
+                        </span>
+                      )}
                     </span>
                   </div>
                 </div>
               </div>
               
               <div className="p-5 border-t border-gray-100">
-                <div className="flex items-center">
-                  <div className="flex-shrink-0">
-                    <div className="h-10 w-10 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 flex items-center justify-center">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                      </svg>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <div className="flex-shrink-0">
+                      <div className="h-10 w-10 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                        </svg>
+                      </div>
+                    </div>
+                    <div className="ml-3">
+                      <p className="text-sm font-medium text-indigo-700">Parent</p>
+                      <p className="text-sm font-medium text-gray-700">{student.parentName}</p>
+                      <p className="text-sm text-indigo-600">{student.parentPhone}</p>
                     </div>
                   </div>
-                  <div className="ml-3">
-                    <p className="text-sm font-medium text-indigo-700">Parent</p>
-                    <p className="text-sm font-medium text-gray-700">{student.parentName}</p>
-                    <p className="text-sm text-indigo-600">{student.parentPhone}</p>
-                  </div>
+                  <button 
+                    onClick={(e) => handlePrintStudent(student, e)}
+                    className="p-2 bg-gradient-to-r from-green-50 to-green-100 hover:from-green-100 hover:to-green-200 text-green-700 rounded-full shadow-sm hover:shadow transition-all duration-200"
+                  >
+                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                    </svg>
+                  </button>
                 </div>
               </div>
             </motion.div>

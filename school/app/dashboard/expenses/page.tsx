@@ -6,6 +6,7 @@ import Card from '@/app/components/ui/Card';
 import Button from '@/app/components/ui/Button';
 import Pagination from '@/app/components/ui/Pagination';
 import { motion } from 'framer-motion';
+import { generateExpenseListPDF, generateExpenseDetailPDF } from '@/app/utils/pdf/pdfGenerator';
 
 // Types pour les données des dépenses
 interface Expense {
@@ -183,6 +184,12 @@ export default function ExpensesPage() {
     // Dans une application réelle, cela utiliserait la navigation Next.js
     console.log('Voir les détails de:', expense);
   };
+  
+  // Gérer l'impression d'une dépense individuelle
+  const handlePrintExpense = (expense: Expense, e: React.MouseEvent) => {
+    e.stopPropagation(); // Empêcher la propagation du clic à la carte parente
+    generateExpenseDetailPDF(expense);
+  };
 
   // Calculer le total des dépenses
   const totalExpenses = expenses.reduce((total, expense) => {
@@ -265,11 +272,12 @@ export default function ExpensesPage() {
                 variant="light" 
                 size="sm"
                 className="bg-gradient-to-r from-blue-100 to-indigo-100 hover:from-blue-200 hover:to-indigo-200 text-indigo-700 font-medium py-2 px-4 rounded-md shadow-sm hover:shadow-md transition-all duration-200"
+                onClick={() => generateExpenseListPDF(filteredExpenses, 'Liste des dépenses')}
               >
                 <svg className="h-5 w-5 mr-1 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
                 </svg>
-                Exporter
+                Exporter en PDF
               </Button>
             </div>
           </div>
@@ -375,20 +383,34 @@ export default function ExpensesPage() {
                       Modifier
                     </Button>
                   </Link>
-                  <Button
-                    variant="light"
-                    size="sm"
-                    className="w-full bg-gradient-to-r from-red-50 to-red-100 hover:from-red-100 hover:to-red-200 text-red-600 border border-red-300 rounded-lg shadow-sm hover:shadow transition-all duration-200 flex items-center justify-center"
-                    onClick={() => {
-                      // Ici, vous pourriez ajouter une confirmation avant la suppression
-                      console.log(`Supprimer la dépense ${expense.id}`);
-                    }}
-                  >
-                    <svg className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                    </svg>
-                    Supprimer
-                  </Button>
+                  <div className="flex space-x-2 w-full">
+                    <Button
+                      variant="light"
+                      size="sm"
+                      className="w-1/2 bg-gradient-to-r from-green-50 to-green-100 hover:from-green-100 hover:to-green-200 text-green-700 border border-green-300 rounded-lg shadow-sm hover:shadow transition-all duration-200 flex items-center justify-center"
+                      onClick={(e) => handlePrintExpense(expense, e)}
+                    >
+                      <svg className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                      </svg>
+                      PDF
+                    </Button>
+                    <Button
+                      variant="light"
+                      size="sm"
+                      className="w-1/2 bg-gradient-to-r from-red-50 to-red-100 hover:from-red-100 hover:to-red-200 text-red-600 border border-red-300 rounded-lg shadow-sm hover:shadow transition-all duration-200 flex items-center justify-center"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        // Ici, vous pourriez ajouter une confirmation avant la suppression
+                        console.log(`Supprimer la dépense ${expense.id}`);
+                      }}
+                    >
+                      <svg className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      </svg>
+                      Supprimer
+                    </Button>
+                  </div>
                 </div>
               </div>
             </motion.div>

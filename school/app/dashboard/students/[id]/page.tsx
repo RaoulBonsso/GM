@@ -89,7 +89,7 @@ export default async function StudentDetailsPage({ params }: StudentDetailsPageP
 
   return (
     <motion.div 
-      className="space-y-6 bg-gradient-to-br from-indigo-50 to-purple-50 p-6 rounded-xl"
+      className="space-y-6 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-6 rounded-xl shadow-lg"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
@@ -140,7 +140,7 @@ export default async function StudentDetailsPage({ params }: StudentDetailsPageP
       >
         {/* Informations personnelles */}
         <motion.div variants={itemVariants} className="lg:col-span-2">
-          <Card className="p-6 border-t-4 border-indigo-500 shadow-md hover:shadow-lg transition-all duration-300">
+          <Card className="p-6 border-t-4 border-indigo-500 bg-gradient-to-br from-white to-indigo-50 shadow-md hover:shadow-lg transition-all duration-300">
             <h2 className="text-xl font-bold text-indigo-700 mb-4 flex items-center">
               <svg className="h-5 w-5 mr-2 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
@@ -148,35 +148,35 @@ export default async function StudentDetailsPage({ params }: StudentDetailsPageP
               Informations personnelles
             </h2>
             <div className="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
-              <div className="bg-indigo-50 p-3 rounded-lg transition-all duration-300 hover:bg-indigo-100">
+              <div className="bg-gradient-to-r from-indigo-50 to-indigo-100 p-3 rounded-lg transition-all duration-300 hover:shadow-md hover:from-indigo-100 hover:to-indigo-200 border border-indigo-100">
                 <h3 className="text-sm font-medium text-indigo-700">Nom complet</h3>
                 <p className="mt-1 text-sm font-semibold text-indigo-600">{student.lastName} {student.firstName}</p>
               </div>
-              <div className="bg-purple-50 p-3 rounded-lg transition-all duration-300 hover:bg-purple-100">
+              <div className="bg-gradient-to-r from-purple-50 to-indigo-100 p-3 rounded-lg transition-all duration-300 hover:shadow-md hover:from-purple-100 hover:to-indigo-200 border border-purple-100">
                 <h3 className="text-sm font-medium text-purple-700">Genre</h3>
                 <p className="mt-1 text-sm font-semibold">
-                  <span className={`px-2 py-1 rounded-full text-xs font-bold ${student.gender === 'M' ? 'bg-blue-100 text-blue-700' : 'bg-pink-100 text-pink-700'}`}>
+                  <span className={`px-2 py-1 rounded-full text-xs font-bold ${student.gender === 'M' ? 'bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-700' : 'bg-gradient-to-r from-pink-100 to-purple-100 text-pink-700'}`}>
                     {student.gender === 'M' ? 'Masculin' : 'Féminin'}
                   </span>
                 </p>
               </div>
-              <div className="bg-indigo-50 p-3 rounded-lg transition-all duration-300 hover:bg-indigo-100">
+              <div className="bg-gradient-to-r from-blue-50 to-indigo-100 p-3 rounded-lg transition-all duration-300 hover:shadow-md hover:from-blue-100 hover:to-indigo-200 border border-blue-100">
                 <h3 className="text-sm font-medium text-indigo-700">Date de naissance</h3>
                 <p className="mt-1 text-sm font-semibold text-indigo-600">{formatDate(student.birthDate)}</p>
               </div>
-              <div className="bg-purple-50 p-3 rounded-lg transition-all duration-300 hover:bg-purple-100">
+              <div className="bg-gradient-to-r from-indigo-50 to-purple-100 p-3 rounded-lg transition-all duration-300 hover:shadow-md hover:from-indigo-100 hover:to-purple-200 border border-indigo-100">
                 <h3 className="text-sm font-medium text-purple-700">Classe</h3>
                 <p className="mt-1 text-sm font-semibold">
-                  <span className="px-2 py-1 bg-indigo-100 text-indigo-700 rounded-full text-xs font-bold">
+                  <span className="px-2 py-1 bg-gradient-to-r from-indigo-100 to-purple-100 text-indigo-700 rounded-full text-xs font-bold">
                     {student.class.name}
                   </span>
                 </p>
               </div>
-              <div className="bg-indigo-50 p-3 rounded-lg transition-all duration-300 hover:bg-indigo-100">
+              <div className="bg-gradient-to-r from-purple-50 to-blue-100 p-3 rounded-lg transition-all duration-300 hover:shadow-md hover:from-purple-100 hover:to-blue-200 border border-purple-100">
                 <h3 className="text-sm font-medium text-indigo-700">Date d'inscription</h3>
                 <p className="mt-1 text-sm font-semibold text-indigo-600">{formatDate(student.registrationDate)}</p>
               </div>
-              <div className="bg-purple-50 p-3 rounded-lg transition-all duration-300 hover:bg-purple-100">
+              <div className="bg-gradient-to-r from-blue-50 to-purple-100 p-3 rounded-lg transition-all duration-300 hover:shadow-md hover:from-blue-100 hover:to-purple-200 border border-blue-100">
                 <h3 className="text-sm font-medium text-purple-700">Adresse</h3>
                 <p className="mt-1 text-sm font-semibold text-purple-600">{student.address}</p>
               </div>
@@ -186,7 +186,7 @@ export default async function StudentDetailsPage({ params }: StudentDetailsPageP
 
         {/* Informations du parent */}
         <motion.div variants={itemVariants}>
-          <Card className="p-6 border-t-4 border-green-500 shadow-md hover:shadow-lg transition-all duration-300">
+          <Card className="p-6 border-t-4 border-green-500 bg-gradient-to-br from-white to-green-50 shadow-md hover:shadow-lg transition-all duration-300">
             <h2 className="text-xl font-bold text-green-700 mb-4 flex items-center">
               <svg className="h-5 w-5 mr-2 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
@@ -194,15 +194,15 @@ export default async function StudentDetailsPage({ params }: StudentDetailsPageP
               Contact parent
             </h2>
             <div className="space-y-4">
-              <div className="bg-green-50 p-3 rounded-lg transition-all duration-300 hover:bg-green-100">
+              <div className="bg-gradient-to-r from-green-50 to-teal-100 p-3 rounded-lg transition-all duration-300 hover:shadow-md hover:from-green-100 hover:to-teal-200 border border-green-100">
                 <h3 className="text-sm font-medium text-green-700">Nom du parent</h3>
                 <p className="mt-1 text-sm font-semibold text-green-600">{student.parentName}</p>
               </div>
-              <div className="bg-teal-50 p-3 rounded-lg transition-all duration-300 hover:bg-teal-100">
+              <div className="bg-gradient-to-r from-teal-50 to-green-100 p-3 rounded-lg transition-all duration-300 hover:shadow-md hover:from-teal-100 hover:to-green-200 border border-teal-100">
                 <h3 className="text-sm font-medium text-teal-700">Téléphone</h3>
                 <p className="mt-1 text-sm font-semibold text-teal-700">{student.parentPhone}</p>
               </div>
-              <div className="bg-green-50 p-3 rounded-lg transition-all duration-300 hover:bg-green-100">
+              <div className="bg-gradient-to-r from-green-50 to-emerald-100 p-3 rounded-lg transition-all duration-300 hover:shadow-md hover:from-green-100 hover:to-emerald-200 border border-green-100">
                 <h3 className="text-sm font-medium text-green-700">Email</h3>
                 <p className="mt-1 text-sm font-semibold text-green-600">{student.parentEmail || '-'}</p>
               </div>
@@ -212,7 +212,7 @@ export default async function StudentDetailsPage({ params }: StudentDetailsPageP
 
         {/* Paiements */}
         <motion.div variants={itemVariants} className="lg:col-span-2">
-          <Card className="p-6 border-t-4 border-amber-500 shadow-md hover:shadow-lg transition-all duration-300">
+          <Card className="p-6 border-t-4 border-amber-500 bg-gradient-to-br from-white to-amber-50 shadow-md hover:shadow-lg transition-all duration-300">
             <h2 className="text-xl font-bold text-amber-700 mb-4 flex items-center">
               <svg className="h-5 w-5 mr-2 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -287,7 +287,7 @@ export default async function StudentDetailsPage({ params }: StudentDetailsPageP
 
         {/* Assiduité */}
         <motion.div variants={itemVariants}>
-          <Card className="p-6 border-t-4 border-blue-500 shadow-md hover:shadow-lg transition-all duration-300">
+          <Card className="p-6 border-t-4 border-blue-500 bg-gradient-to-br from-white to-blue-50 shadow-md hover:shadow-lg transition-all duration-300">
             <h2 className="text-xl font-bold text-blue-700 mb-4 flex items-center">
               <svg className="h-5 w-5 mr-2 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -308,22 +308,22 @@ export default async function StudentDetailsPage({ params }: StudentDetailsPageP
                 ></motion.div>
               </div>
               <div className="grid grid-cols-3 gap-4 mt-4">
-                <div className="bg-green-50 p-3 rounded-lg transition-all duration-300 hover:bg-green-100 text-center">
+                <div className="bg-gradient-to-r from-green-50 to-emerald-100 p-3 rounded-lg transition-all duration-300 hover:shadow-md hover:from-green-100 hover:to-emerald-200 text-center border border-green-100">
                   <h3 className="text-sm font-medium text-green-700">Présent</h3>
                   <p className="mt-1 text-lg font-bold text-green-600">{student.attendance.present}</p>
                   <p className="text-xs text-green-600">jours</p>
                 </div>
-                <div className="bg-red-50 p-3 rounded-lg transition-all duration-300 hover:bg-red-100 text-center">
+                <div className="bg-gradient-to-r from-red-50 to-rose-100 p-3 rounded-lg transition-all duration-300 hover:shadow-md hover:from-red-100 hover:to-rose-200 text-center border border-red-100">
                   <h3 className="text-sm font-medium text-red-700">Absent</h3>
                   <p className="mt-1 text-lg font-bold text-red-600">{student.attendance.absent}</p>
                   <p className="text-xs text-red-600">jours</p>
                 </div>
-                <div className="bg-yellow-50 p-3 rounded-lg transition-all duration-300 hover:bg-yellow-100 text-center">
+                <div className="bg-gradient-to-r from-yellow-50 to-amber-100 p-3 rounded-lg transition-all duration-300 hover:shadow-md hover:from-yellow-100 hover:to-amber-200 text-center border border-yellow-100">
                   <h3 className="text-sm font-medium text-yellow-700">Retard</h3>
                   <p className="mt-1 text-lg font-bold text-yellow-600">{student.attendance.late}</p>
                   <p className="text-xs text-yellow-600">jours</p>
                 </div>
-                <div className="bg-blue-50 p-3 rounded-lg transition-all duration-300 hover:bg-blue-100 text-center col-span-3 mt-2">
+                <div className="bg-gradient-to-r from-blue-50 to-indigo-100 p-3 rounded-lg transition-all duration-300 hover:shadow-md hover:from-blue-100 hover:to-indigo-200 text-center col-span-3 mt-2 border border-blue-100">
                   <h3 className="text-sm font-medium text-blue-700">Total</h3>
                   <p className="mt-1 text-lg font-bold text-blue-600">{student.attendance.total}</p>
                   <p className="text-xs text-blue-600">jours</p>
@@ -336,14 +336,14 @@ export default async function StudentDetailsPage({ params }: StudentDetailsPageP
         {/* Notes */}
         {student.notes && (
           <motion.div variants={itemVariants} className="lg:col-span-3">
-            <Card className="p-6 border-t-4 border-purple-500 shadow-md hover:shadow-lg transition-all duration-300">
+            <Card className="p-6 border-t-4 border-purple-500 bg-gradient-to-br from-white to-purple-50 shadow-md hover:shadow-lg transition-all duration-300">
               <h2 className="text-xl font-bold text-purple-700 mb-4 flex items-center">
                 <svg className="h-5 w-5 mr-2 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                 </svg>
                 Notes
               </h2>
-              <div className="bg-purple-50 p-4 rounded-lg">
+              <div className="bg-gradient-to-r from-purple-50 to-indigo-100 p-4 rounded-lg border border-purple-100 hover:shadow-md transition-all duration-300">
                 <p className="text-sm text-purple-600 italic">"{student.notes}"</p>
               </div>
             </Card>

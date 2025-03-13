@@ -40,6 +40,22 @@ export interface Student {
   parent?: Parent;
   tuitionPayments?: TuitionPayment[];
   attendanceRecords?: AttendanceRecord[];
+  
+  // Propriétés supplémentaires pour le PDF
+  birthPlace?: string;
+  nationality?: string;
+  email?: string;
+  phone?: string;
+  status?: string;
+  parentName?: string;
+  parentContact?: string;
+  parentProfession?: string;
+  parentRelationship?: string;
+  parentEmail?: string;
+  parentAddress?: string;
+  tuitionFee?: number;
+  paymentMethod?: string;
+  name?: string; // Pour compatibilité avec le générateur PDF
 }
 
 // Types pour les parents/tuteurs
