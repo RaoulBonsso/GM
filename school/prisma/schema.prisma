@@ -1,0 +1,196 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// User model for authentication and authorization
+model User {
+  id            String         @id @default(uuid())
+  name          String
+  email         String         @unique
+  password      String
+  role          UserRole       @default(SECRETARY)
+  isActive      Boolean        @default(true)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  expenses      Expense[]
+  notifications Notification[]
+}
+
+// Roles for different user types
+enum UserRole {
+  ADMIN
+  DEVELOPER
+  SECRETARY
+}
+
+// Student model
+model Student {
+  id                String              @id @default(uuid())
+  firstName         String
+  lastName          String
+  dateOfBirth       DateTime
+  gender            Gender
+  address           String?
+  enrollmentDate    DateTime            @default(now())
+  isNewStudent      Boolean             @default(true)
+  remarks           String?
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  classId           String
+  class             Class               @relation(fields: [classId], references: [id])
+  parentId          String
+  parent            Parent              @relation(fields: [parentId], references: [id])
+  tuitionPayments   TuitionPayment[]
+  attendanceRecords AttendanceRecord[]
+}
+
+// Gender enum
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+// Parent/Guardian model
+model Parent {
+  id           String    @id @default(uuid())
+  firstName    String
+  lastName     String
+  relationship String
+  email        String?
+  phoneNumber  String
+  address      String?
+  occupation   String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  students     Student[]
+}
+
+// Class model
+model Class {
+  id              String           @id @default(uuid())
+  name            String
+  grade           String
+  academicYear    String
+  capacity        Int
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  teacherId       String?
+  teacher         Teacher?         @relation(fields: [teacherId], references: [id])
+  students        Student[]
+  attendanceSheets AttendanceSheet[]
+}
+
+// Teacher model
+model Teacher {
+  id           String    @id @default(uuid())
+  firstName    String
+  lastName     String
+  email        String    @unique
+  phoneNumber  String
+  subject      String?
+  qualification String?
+  joinDate     DateTime  @default(now())
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  classes      Class[]
+}
+
+// Tuition Payment model
+model TuitionPayment {
+  id           String   @id @default(uuid())
+  amount       Float
+  paymentDate  DateTime @default(now())
+  paymentMethod String
+  receiptNumber String?
+  academicYear String
+  term         String
+  isPaid       Boolean  @default(false)
+  dueDate      DateTime
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  studentId    String
+  student      Student  @relation(fields: [studentId], references: [id])
+}
+
+// Expense model for school expenses
+model Expense {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  amount      Float
+  category    String
+  date        DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+}
+
+// Notification model
+model Notification {
+  id        String   @id @default(uuid())
+  title     String
+  message   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+// Attendance Record model
+model AttendanceRecord {
+  id         String         @id @default(uuid())
+  date       DateTime       @default(now())
+  status     AttendanceStatus
+  remark     String?
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
+  studentId  String
+  student    Student        @relation(fields: [studentId], references: [id])
+  sheetId    String
+  sheet      AttendanceSheet @relation(fields: [sheetId], references: [id])
+}
+
+// Attendance Status enum
+enum AttendanceStatus {
+  PRESENT
+  ABSENT
+  LATE
+  EXCUSED
+}
+
+// Attendance Sheet model
+model AttendanceSheet {
+  id         String             @id @default(uuid())
+  date       DateTime           @default(now())
+  createdAt  DateTime           @default(now())
+  updatedAt  DateTime           @updatedAt
+  classId    String
+  class      Class              @relation(fields: [classId], references: [id])
+  records    AttendanceRecord[]
+}
+
+// School Statistics model
+model SchoolStatistics {
+  id                String   @id @default(uuid())
+  totalStudents     Int      @default(0)
+  totalTeachers     Int      @default(0)
+  totalClasses      Int      @default(0)
+  totalIncome       Float    @default(0)
+  totalExpenses     Float    @default(0)
+  academicYear      String
+  term              String
+  lastUpdated       DateTime @default(now())
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
