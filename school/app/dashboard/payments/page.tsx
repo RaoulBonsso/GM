@@ -374,14 +374,14 @@ export default function PaymentsPage() {
                 </div>
                 
                 {/* Actions */}
-                <div className="p-4 border-t border-blue-100 flex justify-end space-x-2">
-                  <Link href={`/dashboard/payments/${payment.id}/edit`}>
+                <div className="p-4 border-t border-blue-100 flex justify-end space-x-3">
+                  <Link href={`/dashboard/payments/${payment.id}/edit`} className="block w-full">
                     <Button
                       variant="light"
                       size="sm"
-                      className="bg-white hover:bg-blue-50 text-blue-700 border border-blue-300"
+                      className="w-full bg-gradient-to-r from-blue-50 to-blue-100 hover:from-blue-100 hover:to-blue-200 text-blue-700 border border-blue-300 rounded-lg shadow-sm hover:shadow transition-all duration-200 flex items-center justify-center"
                     >
-                      <svg className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <svg className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                       </svg>
                       Modifier
@@ -390,9 +390,13 @@ export default function PaymentsPage() {
                   <Button
                     variant="light"
                     size="sm"
-                    className="bg-white hover:bg-red-50 text-red-600 border border-red-300"
+                    className="w-full bg-gradient-to-r from-red-50 to-red-100 hover:from-red-100 hover:to-red-200 text-red-600 border border-red-300 rounded-lg shadow-sm hover:shadow transition-all duration-200 flex items-center justify-center"
+                    onClick={() => {
+                      // Ici, vous pourriez ajouter une confirmation avant la suppression
+                      console.log(`Supprimer le paiement ${payment.id}`);
+                    }}
                   >
-                    <svg className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                     </svg>
                     Supprimer
